@@ -54,7 +54,7 @@ def handleNewConnection(client_connection):
 
     HEADERS = "Content-Type: text/plain\nContent-Length: 3"
 
-    http_response = f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}{randomString}"
+    http_response = f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{randomString}"
 
     client_connection.sendall(http_response.encode("utf-8"))
     client_connection.close()
