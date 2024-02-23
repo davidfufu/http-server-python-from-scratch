@@ -37,6 +37,10 @@ def getResponseStatus(path: str) -> str:
 
     return response_status
 
+def getRandomString(path: str) -> str:
+    randomString = path.split("/")[-1]
+    return randomString
+
 def handleNewConnection(client_connection):
     data: bytearray = client_connection.recv(1024)
 
@@ -46,8 +50,11 @@ def handleNewConnection(client_connection):
     method, path, version = parseHttpRequest(data)
 
     response_status = getResponseStatus(path)
+    randomString = getRandomString(path)
 
-    http_response = f"{HTTP_VERSION} {response_status}{CRLF}{CRLF}"
+    HEADERS = "Content-Type: text/plain\nContent-Length: 3"
+
+    http_response = f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}{randomString}"
 
     client_connection.sendall(http_response.encode("utf-8"))
     client_connection.close()
