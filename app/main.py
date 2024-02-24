@@ -28,6 +28,10 @@ def parseHttpRequest(data: bytearray) -> tuple[str, str, str]:
 
 def getResponseStatus(path: str) -> str:
     response_status = ""
+    print("this is path ", path)
+    if "echo" in path:
+        response_status = "200 OK"
+        return response_status
 
     match path:
         case "/":
@@ -38,7 +42,7 @@ def getResponseStatus(path: str) -> str:
     return response_status
 
 def getRandomString(path: str) -> str:
-    randomString = path.split("/")[-1]
+    randomString = path.split("/echo/")[-1]
     return randomString
 
 def handleNewConnection(client_connection):
@@ -58,7 +62,6 @@ def handleNewConnection(client_connection):
 
     client_connection.sendall(http_response.encode("utf-8"))
     client_connection.close()
-
 
 
 def main():
