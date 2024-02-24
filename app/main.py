@@ -56,7 +56,7 @@ def handleNewConnection(client_connection):
     response_status = getResponseStatus(path)
     randomString = getRandomString(path)
 
-    HEADERS = "Content-Type: text/plain\nContent-Length: 3"
+    HEADERS = f"Content-Type: text/plain\nContent-Length: {len(randomString)}"
 
     http_response = f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{randomString}"
 
