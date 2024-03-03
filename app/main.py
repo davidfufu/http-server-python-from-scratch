@@ -83,11 +83,19 @@ def handleNewConnection(client_connection):
     response_status = getResponseStatus(allParsedArgs["path"])
     randomString = getRandomString(allParsedArgs["path"])
 
+    http_response = ""
+
     HEADERS = f"Content-Type: text/plain\nContent-Length: {len(randomString)}"
 
-    http_response = (
-        f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{userAgent}"
-    )
+    if "echo" in allParsedArgs["path"]:
+        http_response = (
+            f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{randomString}"
+        )
+
+    else:
+        http_response = (
+            f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{userAgent}"
+        )
 
     client_connection.sendall(http_response.encode("utf-8"))
     client_connection.close()
