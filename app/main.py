@@ -77,22 +77,24 @@ def handleNewConnection(client_connection):
         return
 
     allParsedArgs = parseHttpRequest(data)
-    userAgent = allParsedArgs["headers"]["User-Agent"]
     print("userAgent", userAgent)
 
     response_status = getResponseStatus(allParsedArgs["path"])
-    randomString = getRandomString(allParsedArgs["path"])
 
     http_response = ""
 
-    HEADERS = f"Content-Type: text/plain\nContent-Length: {len(randomString)}"
-
     if "echo" in allParsedArgs["path"]:
+
+        randomString = getRandomString(allParsedArgs["path"])
+        HEADERS = f"Content-Type: text/plain\nContent-Length: {len(randomString)}"
         http_response = (
             f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{randomString}"
         )
 
-    else:
+    elif "user-agent" in allParsedArgs["path"]:
+
+        userAgent = allParsedArgs["headers"]["User-Agent"]
+        HEADERS = f"Content-Type: text/plain\nContent-Length: {len(userAgent)}"
         http_response = (
             f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{userAgent}"
         )
