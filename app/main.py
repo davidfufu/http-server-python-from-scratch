@@ -80,7 +80,9 @@ def handleNewConnection(client_connection):
 
     response_status = getResponseStatus(allParsedArgs["path"])
 
-    http_response = ""
+    randomString = getRandomString(allParsedArgs["path"])
+    HEADERS = f"Content-Type: text/plain\nContent-Length: {len(randomString)}"
+    http_response = f"{HTTP_VERSION} {response_status}{CRLF}{CRLF}"
 
     if "echo" in allParsedArgs["path"]:
 
