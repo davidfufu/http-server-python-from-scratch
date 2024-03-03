@@ -50,7 +50,6 @@ def parseHttpRequest(data: bytearray) -> dict:
 #  {#2d9,14}
 def getResponseStatus(path: str) -> str:
     response_status = ""
-    print("this is path ", path)
     if "echo" in path:
         response_status = "200 OK"
         return response_status
