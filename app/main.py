@@ -77,7 +77,6 @@ def handleNewConnection(client_connection):
         return
 
     allParsedArgs = parseHttpRequest(data)
-    print("userAgent", userAgent)
 
     response_status = getResponseStatus(allParsedArgs["path"])
 
