@@ -31,9 +31,9 @@ def parseHttpRequest(data: bytearray) -> dict:
     headers = split_request_data[1:-2]
     body = split_request_data[-1]
 
-    print(f"REQUEST_LINE: {requestLine}")
-    print(f"HEADERS: {headers}")
-    print(f"BODY: {body}")
+    # print(f"REQUEST_LINE: {requestLine}")
+    # print(f"HEADERS: {headers}")
+    # print(f"BODY: {body}")
 
     partition = requestLine.split()
 
@@ -47,7 +47,7 @@ def parseHttpRequest(data: bytearray) -> dict:
     parsedRequestArgs["version"] = version
     parsedRequestArgs["headers"] = parseHeaders(headers)
 
-    print(parsedRequestArgs)
+    # print(parsedRequestArgs)
 
     return parsedRequestArgs
 
