@@ -1,6 +1,8 @@
 # Uncomment this to pass the first stage
 import socket
 import threading
+import argparse
+import os
 
 CRLF = "\r\n"
 HTTP_VERSION = "HTTP/1.1"
@@ -104,7 +106,18 @@ def handleNewConnection(client_connection):
         )
 
     elif "files" in allParsedArgs["path"]:
-        print(allParsedArgs["path"])
+        fileName = allParsedArgs["path"].split("files/")[-1]
+        filePath = os.path.join(file_directory, fileName)
+
+        response_status = ""
+
+        if os.path.exists(filePath):
+            response_status = "200 OK"
+        else:
+            response_status = "404 Not Found"
+
+        HEADERS = "Content-Type: text/plain"
+        http_response = f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}"
 
     client_connection.sendall(http_response.encode("utf-8"))
     client_connection.close()
@@ -112,6 +125,12 @@ def handleNewConnection(client_connection):
 
 #  {#6b1,13}
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--directory", type=str)
+    args = parser.parse_args()
+    global file_directory
+    file_directory = args.directory
+
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!")
 
