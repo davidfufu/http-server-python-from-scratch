@@ -11,6 +11,8 @@ def parseHeaders(headers: list) -> dict:
     parsedHeaders = {}
 
     for header in headers:
+        if header == "":
+            continue
         hName, hValue = header.split(": ")
         parsedHeaders[hName] = hValue
 
