@@ -111,7 +111,7 @@ def handleNewConnection(client_connection):
 
         response_status = ""
 
-        if os.path.exists(filePath):
+        if os.path.isfile(filePath):
             response_status = "200 OK"
         else:
             response_status = "404 Not Found"
