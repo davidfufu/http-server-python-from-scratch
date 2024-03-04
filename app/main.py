@@ -117,7 +117,7 @@ def handleNewConnection(client_connection):
             response_status = "404 Not Found"
 
         HEADERS = "Content-Type: text/plain"
-        http_response = f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}"
+        http_response = f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}"
 
     client_connection.sendall(http_response.encode("utf-8"))
     client_connection.close()
