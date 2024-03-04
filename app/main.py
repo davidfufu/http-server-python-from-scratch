@@ -110,14 +110,19 @@ def handleNewConnection(client_connection):
         filePath = os.path.join(file_directory, fileName)
 
         response_status = ""
+        contents = ""
 
         if os.path.isfile(filePath):
             response_status = "200 OK"
+            with open(filePath) as f:
+                contents = f.read()
+                HEADERS = f"Content-Type: application/octet-stream\nContent-Length: {len(contents)}"
+                http_response = (
+                    f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{contents}"
+                )
+
         else:
             response_status = "404 Not Found"
-
-        with open(filePath) as f:
-            contents = f.read()
             HEADERS = f"Content-Type: application/octet-stream\nContent-Length: {len(contents)}"
             http_response = (
                 f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{contents}"
