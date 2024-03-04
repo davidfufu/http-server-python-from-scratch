@@ -46,6 +46,7 @@ def parseHttpRequest(data: bytearray) -> dict:
     parsedRequestArgs["path"] = path
     parsedRequestArgs["version"] = version
     parsedRequestArgs["headers"] = parseHeaders(headers)
+    parsedRequestArgs["body"] = body
 
     print(parsedRequestArgs)
 
@@ -89,43 +90,60 @@ def handleNewConnection(client_connection):
     HEADERS = f"Content-Type: text/plain\nContent-Length: {len(randomString)}"
     http_response = f"{HTTP_VERSION} {response_status}{CRLF}{CRLF}"
 
-    if "echo" in allParsedArgs["path"]:
+    if allParsedArgs["method"] == "GET":
 
-        randomString = getRandomString(allParsedArgs["path"])
-        HEADERS = f"Content-Type: text/plain\nContent-Length: {len(randomString)}"
-        http_response = (
-            f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{randomString}"
-        )
+        if "echo" in allParsedArgs["path"]:
 
-    elif "user-agent" in allParsedArgs["path"]:
+            randomString = getRandomString(allParsedArgs["path"])
+            HEADERS = f"Content-Type: text/plain\nContent-Length: {len(randomString)}"
+            http_response = (
+                f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{randomString}"
+            )
 
-        userAgent = allParsedArgs["headers"]["User-Agent"]
-        HEADERS = f"Content-Type: text/plain\nContent-Length: {len(userAgent)}"
-        http_response = (
-            f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{userAgent}"
-        )
+        elif "user-agent" in allParsedArgs["path"]:
 
-    elif "files" in allParsedArgs["path"]:
-        fileName = allParsedArgs["path"].split("files/")[-1]
-        filePath = os.path.join(file_directory, fileName)
+            userAgent = allParsedArgs["headers"]["User-Agent"]
+            HEADERS = f"Content-Type: text/plain\nContent-Length: {len(userAgent)}"
+            http_response = (
+                f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{userAgent}"
+            )
 
-        response_status = ""
-        contents = ""
+        elif "files" in allParsedArgs["path"]:
+            fileName = allParsedArgs["path"].split("files/")[-1]
+            filePath = os.path.join(file_directory, fileName)
 
-        if os.path.isfile(filePath):
-            response_status = "200 OK"
+            response_status = ""
+            contents = ""
+
+            if os.path.isfile(filePath):
+                response_status = "200 OK"
+                with open(filePath) as f:
+                    contents = f.read()
+
+            else:
+                response_status = "404 Not Found"
+
+            HEADERS = f"Content-Type: application/octet-stream\nContent-Length: {len(contents)}"
+            http_response = (
+                f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{contents}"
+            )
+
+    elif allParsedArgs["method"] == "POST":
+        if "files" in allParsedArgs["path"]:
+            fileName = allParsedArgs["path"].split("/files/")[-1]
+            filePath = os.path.join(file_directory, fileName)
+            body = allParsedArgs["body"]
+
             with open(filePath) as f:
-                contents = f.read()
+                f.write(body)
 
-        else:
-            response_status = "404 Not Found"
-
-        HEADERS = (
-            f"Content-Type: application/octet-stream\nContent-Length: {len(contents)}"
-        )
-        http_response = (
-            f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{contents}"
-        )
+            response_status = "201 Created"
+            HEADERS = (
+                f"Content-Type: application/octet-stream\nContent-Length: {len(body)}"
+            )
+            http_response = (
+                f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{}"
+            )
 
     client_connection.sendall(http_response.encode("utf-8"))
     client_connection.close()
