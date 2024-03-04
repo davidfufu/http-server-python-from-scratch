@@ -134,7 +134,7 @@ def handleNewConnection(client_connection):
             filePath = os.path.join(file_directory, fileName)
             body = allParsedArgs["body"]
 
-            with open(filePath) as f:
+            with open(filePath, "w") as f:
                 f.write(body)
 
             response_status = "201 Created"
