@@ -103,6 +103,9 @@ def handleNewConnection(client_connection):
             f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{userAgent}"
         )
 
+    elif "files" in allParsedArgs["path"]:
+        print(allParsedArgs["path"])
+
     client_connection.sendall(http_response.encode("utf-8"))
     client_connection.close()
 
