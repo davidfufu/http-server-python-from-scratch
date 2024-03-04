@@ -1,5 +1,6 @@
 # Uncomment this to pass the first stage
 import socket
+import threading
 
 CRLF = "\r\n"
 HTTP_VERSION = "HTTP/1.1"
@@ -117,7 +118,8 @@ def main():
 
     while True:
         conn, addr = server_socket.accept()  # wait for client
-        handleNewConnection(conn)
+        thread = threading.Thread(target=handleNewConnection, args=(conn,))
+        thread.start()
 
 
 if __name__ == "__main__":
