@@ -116,7 +116,7 @@ def handleNewConnection(client_connection):
         else:
             response_status = "404 Not Found"
 
-        HEADERS = "Content-Type: text/plain\nContent-Length: {len(fileName)}"
+        HEADERS = f"Content-Type: text/plain\nContent-Length: {len(fileName)}"
         http_response = f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}\n{fileName}"
 
     client_connection.sendall(http_response.encode("utf-8"))
