@@ -118,7 +118,6 @@ def handleNewConnection(client_connection):
 
         with open(filePath) as f:
             contents = f.read()
-            print("contents ", contents)
             HEADERS = f"Content-Type: application/octet-stream\nContent-Length: {len(fileName)}"
             http_response = (
                 f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{contents}"
