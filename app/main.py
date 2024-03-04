@@ -141,9 +141,7 @@ def handleNewConnection(client_connection):
             HEADERS = (
                 f"Content-Type: application/octet-stream\nContent-Length: {len(body)}"
             )
-            http_response = (
-                f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n{}"
-            )
+            http_response = f"{HTTP_VERSION} {response_status}{CRLF}{HEADERS}{CRLF}\n"
 
     client_connection.sendall(http_response.encode("utf-8"))
     client_connection.close()
